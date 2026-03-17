@@ -1,0 +1,30 @@
+package dev.drezolis.RecipeForge.model;
+
+public enum Category {
+
+    CARNE_VERMELHA,
+    AVES,
+    PEIXE,
+    FRUTOS_DO_MAR,
+    OVOS,
+    PROTEINA_VEGETAL,
+    MASSAS,
+    PAES,
+    TUBERCULOS,
+    VEGETAIS,
+    VERDURAS_FOLHOSAS,
+    FRUTAS,
+    FUNGOS,
+    OLEOS_E_GORDURAS,
+    OLEAGINOSAS_E_SEMENTES,
+    ERVAS,
+    ESPECIARIAS,
+    CONDIMENTOS,
+    MOLHOS,
+    LATICINIOS,
+    ADOCANTES,
+    BEBIDAS,
+    CONSERVAS,
+    OUTROS
+
+}

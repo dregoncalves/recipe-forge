@@ -30,9 +30,11 @@ public class FoodItemService {
                 .collect(Collectors.toList());
     }
 
+    // TODO: Melhorar mensagem de exceção
     public FoodItemDTO getById(Long id) {
-        Optional<FoodItem> food = foodItemRepository.findById(id);
-        return food.map(foodItemMapper::toDto).orElse(null);
+        return foodItemRepository.findById(id)
+                .map(foodItemMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Objeto não encontrado"));
     }
 
     public FoodItemDTO createFood(FoodItemDTO foodItemDTO) {
@@ -41,18 +43,25 @@ public class FoodItemService {
         return foodItemMapper.toDto(foodItem);
     }
 
+    // TODO: Melhorar mensagem de exceção
     public FoodItemDTO updateFood(Long id, FoodItemDTO foodItemDTO) {
-        if (foodItemRepository.findById(id).isPresent()) {
-            FoodItem foodItem = foodItemMapper.toModel(foodItemDTO);
-            foodItem.setId(id);
-            FoodItem savedFoodItem = foodItemRepository.save(foodItem);
-            return foodItemMapper.toDto(savedFoodItem);
-        }
-        return null;
+        FoodItem existing = foodItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Objeto não encontrado"));
+
+        existing.setId(id);
+        existing.setName(foodItemDTO.getName());
+        existing.setCategory(foodItemDTO.getCategory());
+        existing.setQuantity(foodItemDTO.getQuantity());
+        existing.setExpiryDate(foodItemDTO.getExpiryDate());
+
+        return foodItemMapper.toDto(foodItemRepository.save(existing));
     }
 
+    // TODO: Melhorar mensagem de exceção
     public void deleteFood(Long id) {
-        FoodItem foodItem = foodItemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Objeto não encontrado"));
-        foodItemRepository.delete(foodItem);
+       if (!foodItemRepository.existsById(id)) {
+           throw new EntityNotFoundException("Objeto não encontrado");
+       }
+       foodItemRepository.deleteById(id);
     }
 }
